@@ -78,10 +78,22 @@ console.log("statusLabels : " + statusLabels);
 const youngProple = people.filter(person => person.age < 25);  // Keep elements that match condition
 console.log("youngProple : " + youngProple);
 const avgAge = people.reduce((sum, person) => sum + person.age, 0);  // Reduce to single value
-console.log("averageAge : " + avgAge);
+console.log("averageAge : " + avgAge / length);
 
 let fromKochi = people.find(person => person.place === "Kochi");
 console.log("persons from Kochi : " + fromKochi);
+
+
+let array = [2, 3, 1, 4, 5];
+let reversed = array.sort((num1, num2) => {
+  // console.log("num1 :" + num1 +"num2 : " + num2);
+  let num = num2 - num1;
+  // console.log("number : " + num);
+  return num;
+  
+});
+console.log("Sorted array in reverse order : ", reversed);
+console.log("Sorted : ", array.sort());
 
 
 
