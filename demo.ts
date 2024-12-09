@@ -95,95 +95,142 @@
   console.log("userName : " + getName(user1)); // Output: "userName : amrudesh_ps"
 }
 
+{
+  // 1. Named Types: Interface and Type Alias
+  interface User {
+    id: number;
+    name: string;
+    role: Role; // Uses Enum for the role
+    isActive: boolean;
+  }
 
+  type Role = "Admin" | "User" | "Guest"; // Type Alias for role
 
+  // 2. Enums and `as const`
+  const STATUSES = {
+    ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
+    SUSPENDED: "SUSPENDED",
+  } as const;
 
+  type Status = (typeof STATUSES)[keyof typeof STATUSES]; // Extracting types from `as const`
+
+  // 3. Function Overloading
+  function getUserInfo(user: User): string;
+  function getUserInfo(id: number): string;
+  function getUserInfo(data: User | number): string {
+    if (typeof data === "number") {
+      return `Fetching user information for user ID: ${data}`;
+    }
+    return `User Info - ID: ${data.id}, Name: ${data.name}, Role: ${data.role}`;
+  }
+
+  // 4. Generics
+  function wrapValue<T>(value: T): { content: T } {
+    return { content: value };
+  }
+
+  // 5. `keyof` and `typeof`
+  type UserKeys = keyof User; // "id" | "name" | "role" | "isActive"
+
+  const exampleKey: UserKeys = "name"; // Valid
+  const userExample: User = {
+    id: 1,
+    name: "Alice",
+    role: "Admin",
+    isActive: true,
+  };
+
+  // 6. Utility Types
+  type PartialUser = Partial<User>; // Makes all properties optional
+  type ReadonlyUser = Readonly<User>; // Makes all properties read-only
+  type UserWithoutRole = Omit<User, "role">; // Excludes "role" from User
+  type UserWithNameOnly = Pick<User, "name">; // Includes only "name" property
+
+  // 7. Special Types: `any`, `unknown`, `never`, `void`, `null`
+  let anyValue: any = 42; // Can be any type
+  anyValue = "Now a string!";
+
+  let unknownValue: unknown = "Hello, unknown!";
+  if (typeof unknownValue === "string") {
+    console.log(unknownValue.toUpperCase()); // Safe after type check
+  }
+
+  function throwError(message: string): never {
+    throw new Error(message); // Function never returns
+  }
+
+  function logMessage(message: string): void {
+    console.log(message); // No return value
+  }
+
+  let nullableValue: string | null = null; // Nullable value
+  nullableValue = "Not null anymore!";
+
+  // Example Usage
+  const user: User = { id: 101, name: "Bob", role: "User", isActive: true };
+  console.log(getUserInfo(user)); // Output: User Info - ID: 101, Name: Bob, Role: User
+  console.log(getUserInfo(102)); // Output: Fetching user information for user ID: 102
+
+  const wrapped = wrapValue(user);
+  console.log(wrapped.content.name); // Output: Bob
+
+  const userKeys: UserKeys[] = ["id", "name", "role", "isActive"];
+  console.log(userKeys); // Output: ["id", "name", "role", "isActive"]
+
+  const partialUser: PartialUser = { name: "Charlie" };
+  const readonlyUser: ReadonlyUser = {
+    id: 202,
+    name: "Eve",
+    role: "Guest",
+    isActive: false,
+  };
+  // readonlyUser.name = "New Name"; // Error: Cannot assign to 'name' because it is a read-only property
+
+  const userWithoutRole: UserWithoutRole = {
+    id: 303,
+    name: "Dave",
+    isActive: true,
+  };
+  console.log(userWithoutRole); // Output: { id: 303, name: "Dave", isActive: true }
+
+  logMessage("This is a message!"); // Output: This is a message!
+}
 
 {
-// 1. Named Types: Interface and Type Alias
-interface User {
-  id: number;
-  name: string;
-  role: Role; // Uses Enum for the role
-  isActive: boolean;
-}
-
-type Role = "Admin" | "User" | "Guest"; // Type Alias for role
-
-// 2. Enums and `as const`
-const STATUSES = {
-  ACTIVE: "ACTIVE",
-  INACTIVE: "INACTIVE",
-  SUSPENDED: "SUSPENDED",
-} as const;
-
-type Status = typeof STATUSES[keyof typeof STATUSES]; // Extracting types from `as const`
-
-// 3. Function Overloading
-function getUserInfo(user: User): string;
-function getUserInfo(id: number): string;
-function getUserInfo(data: User | number): string {
-  if (typeof data === "number") {
-    return `Fetching user information for user ID: ${data}`;
+  type UserDetials = {
+    name: string;
+    id: number;
+  };
+  type AdminDetials = UserDetials & {
+    role: string;
+  };
+  const user1: UserDetials = {
+    name: "appu" ,
+    id: 8 ,
+  };
+  let name = "amrudesh_ps" as const;
+  console.log(name);
+    
+  function getAge(num: number): {
+    content1: number;
+    content2: number;
+  } {
+    return {
+      content1: num,
+      content2: num,
+    };
   }
-  return `User Info - ID: ${data.id}, Name: ${data.name}, Role: ${data.role}`;
-}
-
-// 4. Generics
-function wrapValue<T>(value: T): { content: T } {
-  return { content: value };
-}
-
-// 5. `keyof` and `typeof`
-type UserKeys = keyof User; // "id" | "name" | "role" | "isActive"
-
-const exampleKey: UserKeys = "name"; // Valid
-const userExample: User = { id: 1, name: "Alice", role: "Admin", isActive: true };
-
-// 6. Utility Types
-type PartialUser = Partial<User>; // Makes all properties optional
-type ReadonlyUser = Readonly<User>; // Makes all properties read-only
-type UserWithoutRole = Omit<User, "role">; // Excludes "role" from User
-type UserWithNameOnly = Pick<User, "name">; // Includes only "name" property
-
-// 7. Special Types: `any`, `unknown`, `never`, `void`, `null`
-let anyValue: any = 42; // Can be any type
-anyValue = "Now a string!";
-
-let unknownValue: unknown = "Hello, unknown!";
-if (typeof unknownValue === "string") {
-  console.log(unknownValue.toUpperCase()); // Safe after type check
-}
-
-function throwError(message: string): never {
-  throw new Error(message); // Function never returns
-}
-
-function logMessage(message: string): void {
-  console.log(message); // No return value
-}
-
-let nullableValue: string | null = null; // Nullable value
-nullableValue = "Not null anymore!";
-
-// Example Usage
-const user: User = { id: 101, name: "Bob", role: "User", isActive: true };
-console.log(getUserInfo(user)); // Output: User Info - ID: 101, Name: Bob, Role: User
-console.log(getUserInfo(102)); // Output: Fetching user information for user ID: 102
-
-const wrapped = wrapValue(user);
-console.log(wrapped.content.name); // Output: Bob
-
-const userKeys: UserKeys[] = ["id", "name", "role", "isActive"];
-console.log(userKeys); // Output: ["id", "name", "role", "isActive"]
-
-const partialUser: PartialUser = { name: "Charlie" };
-const readonlyUser: ReadonlyUser = { id: 202, name: "Eve", role: "Guest", isActive: false };
-// readonlyUser.name = "New Name"; // Error: Cannot assign to 'name' because it is a read-only property
-
-const userWithoutRole: UserWithoutRole = { id: 303, name: "Dave", isActive: true };
-console.log(userWithoutRole); // Output: { id: 303, name: "Dave", isActive: true }
-
-logMessage("This is a message!"); // Output: This is a message!
-
+  let obj = getAge(12);
+  console.log("Number1 : " + obj.content1 + "Number2 : " + obj.content2);
+  const enum status {
+    PENDING = "pending",
+    SUCCESS = "success",
+    REJECT = "rejected",
+  }
+  function geTAge<T>(num: T): T {
+    return num;
+  }
+  console.log(geTAge<number>(12));
+  console.log(geTAge<string>(status.PENDING));
 }

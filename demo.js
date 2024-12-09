@@ -87,7 +87,12 @@
         return { content: value };
     }
     var exampleKey = "name"; // Valid
-    var userExample = { id: 1, name: "Alice", role: "Admin", isActive: true };
+    var userExample = {
+        id: 1,
+        name: "Alice",
+        role: "Admin",
+        isActive: true,
+    };
     // 7. Special Types: `any`, `unknown`, `never`, `void`, `null`
     var anyValue = 42; // Can be any type
     anyValue = "Now a string!";
@@ -112,9 +117,39 @@
     var userKeys = ["id", "name", "role", "isActive"];
     console.log(userKeys); // Output: ["id", "name", "role", "isActive"]
     var partialUser = { name: "Charlie" };
-    var readonlyUser = { id: 202, name: "Eve", role: "Guest", isActive: false };
+    var readonlyUser = {
+        id: 202,
+        name: "Eve",
+        role: "Guest",
+        isActive: false,
+    };
     // readonlyUser.name = "New Name"; // Error: Cannot assign to 'name' because it is a read-only property
-    var userWithoutRole = { id: 303, name: "Dave", isActive: true };
+    var userWithoutRole = {
+        id: 303,
+        name: "Dave",
+        isActive: true,
+    };
     console.log(userWithoutRole); // Output: { id: 303, name: "Dave", isActive: true }
     logMessage("This is a message!"); // Output: This is a message!
+}
+{
+    var user1 = {
+        name: "appu",
+        id: 8,
+    };
+    var name_3 = "amrudesh_ps";
+    console.log(name_3);
+    function getAge(num) {
+        return {
+            content1: num,
+            content2: num,
+        };
+    }
+    var obj = getAge(12);
+    console.log("Number1 : " + obj.content1 + "Number2 : " + obj.content2);
+    function geTAge(num) {
+        return num;
+    }
+    console.log(geTAge(12));
+    console.log(geTAge("pending" /* status.PENDING */));
 }
